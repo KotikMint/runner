@@ -30,6 +30,9 @@ public class PlatformGenerator : MonoBehaviour
     public CoinGenerator theCoinGenerator;
     public float randomCoinThreshold;
 
+    public float randomTrapThreshold;
+    public ObjectPooler trapPool;
+
 
 
     void Start()
@@ -85,8 +88,21 @@ public class PlatformGenerator : MonoBehaviour
             {
                 theCoinGenerator.SpawnCoins(new Vector3 (transform.position.x, transform.position.y + 1f, transform.position.z));
             }
-            
-            transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector] / 2 ), transform.position.y, transform.position.z);
+
+             if(Random.Range(0f,100f) < randomTrapThreshold)
+             {
+                GameObject newTrap = trapPool.GetPooledObject();
+
+                float trapXPosition = Random.Range(-platformWidths[platformSelector] / 2f + 1f, platformWidths[platformSelector] / 2f - 1f);
+                Vector3 trapPosition = new Vector3 (trapXPosition, 0.5f, 0f);
+
+                newTrap.transform.position = transform.position + trapPosition;
+                newTrap.transform.rotation = transform.rotation;
+                newTrap.SetActive(true);
+
+             }
+
+            transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector] / 2 ), transform.position.y , transform.position.z);
             
         }
         
